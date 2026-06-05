@@ -39,6 +39,36 @@ export const botConfig = {
     // Bot owner user IDs (comma-separated in OWNER_IDS env var).
     // Owners can access owner/admin-level bot commands.
     owners: process.env.OWNER_IDS?.split(",") || [],
+    export default {
+  data: new SlashCommandBuilder()
+    .setName("sign")
+    .setDescription("Sign a player")
+    // options...
+
+  async execute(interaction) {
+    // sign code here
+  }
+}
+    export default {
+  data: new SlashCommandBuilder()
+    .setName("release")
+    .setDescription("Release a player")
+    // options...
+
+  async execute(interaction) {
+    // release code here
+  }
+}
+  export default {
+  data: new SlashCommandBuilder()
+    .setName("roster")
+    .setDescription("View a roster")
+    // options...
+
+  async execute(interaction) {
+    // roster code here
+  }
+}
 
     // Default wait time between command uses (in seconds).
     defaultCooldown: 3, 
