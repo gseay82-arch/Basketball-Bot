@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from "discord.js";
 
-const TRANSACTIONS_CHANNEL_ID = "PUT_TRANSACTIONS_CHANNEL_ID_HERE";
 const HEAD_COACH_ROLE_ID = "1512331578775310366";
 const GENERAL_MANAGER_ROLE_ID = "1512331689035304960";
 const PLAYER_ROLE_ID = "1512331841179353118";
 const FREE_AGENT_ROLE_ID = "1512331925241598062";
+const TRANSACTIONS_CHANNEL_ID = "1512328699066978455";
 
 const NBA_TEAMS = [
   { name: "Atlanta Hawks", roleId: "1512517955303379007" },
@@ -47,22 +47,21 @@ export default {
       option.setName("player").setDescription("Player to release").setRequired(true)
     )
     .addStringOption(option =>
-      option.setName("team").setDescription("Example: New York Knicks").setRequired(true)
+      option
+        .setName("team")
+        .setDescription("Team to release the player from")
+        .setRequired(true)
+        .addChoices(...NBA_TEAMS.map(team => ({ name: team.name, value: team.name })))
     ),
 
   async execute(interaction) {
     const player = interaction.options.getMember("player");
     const teamName = interaction.options.getString("team");
-
-    const team = NBA_TEAMS.find(t => t.name.toLowerCase() === teamName.toLowerCase());
-
-    if (!team) {
-      return interaction.reply({ content: "❌ Team not found.", ephemeral: true });
-    }
+    const team = NBA_TEAMS.find(t => t.name === teamName);
 
     const hasStaffRole =
-      interaction.member.roles.cache.has("1512331578775310366") ||
-      interaction.member.roles.cache.has("1512331689035304960");
+      interaction.member.roles.cache.has(HEAD_COACH_ROLE_ID) ||
+      interaction.member.roles.cache.has(GENERAL_MANAGER_ROLE_ID);
 
     const hasTeamRole = interaction.member.roles.cache.has(team.roleId);
 
@@ -84,21 +83,24 @@ export default {
 
     const allTeamRoleIds = NBA_TEAMS.map(t => t.roleId);
 
-    await freshPlayer.roles.remove([
-      PLAYER_ROLE_ID,
-      ...allTeamRoleIds,
-]);
-    
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
+    try {
+      await freshPlayer.roles.remove([PLAYER_ROLE_ID, ...allTeamRoleIds]);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
+    } catch (error) {
+      console.error(error);
+      return interaction.reply({
+        content: "❌ I could not update this player's roles. Check my role permissions.",
+        ephemeral: true,
+      });
+    }
 
     await interaction.guild.members.fetch();
 
     const teamRole = interaction.guild.roles.cache.get(team.roleId);
     const rosterCount = teamRole ? teamRole.members.size : "Unknown";
 
-    const transactionsChannel = interaction.guild.channels.cache.get("1512328699066978455");
+    const transactionsChannel = interaction.guild.channels.cache.get(TRANSACTIONS_CHANNEL_ID);
 
     if (transactionsChannel) {
       await transactionsChannel.send(
@@ -106,7 +108,7 @@ export default {
       );
     }
 
-    await interaction.reply({
+    return interaction.reply({
       content: `📄 ${freshPlayer} has been released by **${team.name}**.\nRoster Count: **${rosterCount}/15**`,
     });
   },
