@@ -73,7 +73,11 @@ export default {
       });
     }
 
-    const alreadyOnTeam = NBA_TEAMS.find(t => player.roles.cache.has(t.roleId));
+    const freshPlayer = await interaction.guild.members.fetch(player.id);
+
+    const alreadyOnTeam = NBA_TEAMS.find(t =>
+      freshPlayer.roles.cache.has(t.roleId)  
+);
 
     if (alreadyOnTeam) {
       return interaction.reply({
@@ -82,8 +86,8 @@ export default {
       });
     }
 
-    await player.roles.add(["1512331841179353118", team.roleId]);
-    await player.roles.remove("1512331925241598062").catch(() => null);
+    await freshPlayer.roles.add([PLAYER_ROLE_ID, team.roleId]);
+    await freshPlayer.roles.remove(FREE_AGENT_ROLE_ID).catch(() => null);
 
     await interaction.guild.members.fetch();
 
