@@ -50,27 +50,24 @@ export default {
     ),
 
   async execute(interaction) {
-    const hasPermission =
-      interaction.member.roles.cache.has(HEAD_COACH_ROLE_ID) ||
-      interaction.member.roles.cache.has(GENERAL_MANAGER_ROLE_ID);
-
-    if (!hasPermission) {
-      return interaction.reply({
-        content: "❌ You need the Head Coach or General Manager role to release players.",
-        ephemeral: true,
-      });
-    }
-
     const player = interaction.options.getMember("player");
     const teamName = interaction.options.getString("team");
 
-    const team = NBA_TEAMS.find(
-      t => t.name.toLowerCase() === teamName.toLowerCase()
-    );
+    const team = NBA_TEAMS.find(t => t.name.toLowerCase() === teamName.toLowerCase());
 
     if (!team) {
+      return interaction.reply({ content: "❌ Team not found.", ephemeral: true });
+    }
+
+    const hasStaffRole =
+      interaction.member.roles.cache.has(1512331578775310366) ||
+      interaction.member.roles.cache.has(1512331689035304960);
+
+    const hasTeamRole = interaction.member.roles.cache.has(team.roleId);
+
+    if (!hasStaffRole || !hasTeamRole) {
       return interaction.reply({
-        content: "❌ Team not found. Make sure you typed the full team name.",
+        content: `❌ You need Head Coach or General Manager AND the **${team.name}** role to manage this team.`,
         ephemeral: true,
       });
     }
@@ -82,8 +79,8 @@ export default {
       });
     }
 
-    await player.roles.remove([PLAYER_ROLE_ID, team.roleId]);
-    await player.roles.add(FREE_AGENT_ROLE_ID);
+    await player.roles.remove([1512331841179353118, team.roleId]);
+    await player.roles.add(1512331925241598062);
 
     await interaction.guild.members.fetch();
 
