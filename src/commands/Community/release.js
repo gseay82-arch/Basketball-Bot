@@ -82,8 +82,14 @@ export default {
       });
     }
 
-    await freshPlayer.roles.remove(["1512331841179353118", team.roleId]);
-    await freshPlayer.roles.add("1512331925241598062");
+    const allTeamRoleIds = NBA_TEAMS.map(t => t.roleId);
+
+    await freshPlayer.roles.remove([
+    PLAYER_ROLE_ID,
+    ...allTeamRoleIds,
+    ]);
+
+    await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
 
     await interaction.guild.members.fetch();
 
