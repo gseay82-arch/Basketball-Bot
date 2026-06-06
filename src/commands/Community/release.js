@@ -84,9 +84,9 @@ export default {
 
     const allTeamRoleIds = NBA_TEAMS.map(t => t.roleId);
 
-await freshPlayer.roles.remove([
-  PLAYER_ROLE_ID,
-  ...allTeamRoleIds,
+    await freshPlayer.roles.remove([
+      PLAYER_ROLE_ID,
+      ...allTeamRoleIds,
 ]);
 
 await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
