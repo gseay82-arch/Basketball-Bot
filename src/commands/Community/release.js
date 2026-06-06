@@ -64,7 +64,14 @@ export default {
     interaction.member.roles.cache.has("1512331689035304960");
 
   const hasTeamRole = interaction.member.roles.cache.has(team.roleId);
-
+  return interaction.reply({
+  content:
+    `HC: ${interaction.member.roles.cache.has("1512331578775310366")}\n` +
+    `GM: ${interaction.member.roles.cache.has("1512331689035304960")}\n` +
+    `Team: ${interaction.member.roles.cache.has(team.roleId)}\n` +
+    `Team ID: ${team.roleId}`,
+  ephemeral: true,
+});
   if (!hasStaffRole || !hasTeamRole) {
     return interaction.reply({
       content: `❌ You need Head Coach or General Manager AND the **${team.name}** role to manage this team.`,
