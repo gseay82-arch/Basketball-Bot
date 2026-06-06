@@ -50,53 +50,47 @@ export default {
     ),
 
   async execute(interaction) {
-  const player = interaction.options.getMember("player");
-  const teamName = interaction.options.getString("team");
+    const player = interaction.options.getMember("player");
+    const teamName = interaction.options.getString("team");
 
-  const team = NBA_TEAMS.find(t => t.name.toLowerCase() === teamName.toLowerCase());
+    const team = NBA_TEAMS.find(t => t.name.toLowerCase() === teamName.toLowerCase());
 
-  if (!team) {
-    return interaction.reply({ content: "❌ Team not found.", ephemeral: true });
-  }
+    if (!team) {
+      return interaction.reply({ content: "❌ Team not found.", ephemeral: true });
+    }
 
-  const hasStaffRole =
-    interaction.member.roles.cache.has("1512331578775310366") ||
-    interaction.member.roles.cache.has("1512331689035304960");
+    const hasStaffRole =
+      interaction.member.roles.cache.has(HEAD_COACH_ROLE_ID) ||
+      interaction.member.roles.cache.has(GENERAL_MANAGER_ROLE_ID);
 
-  const hasTeamRole = interaction.member.roles.cache.has(team.roleId);
-  return interaction.reply({
-  content:
-    `HC: ${interaction.member.roles.cache.has("1512331578775310366")}\n` +
-    `GM: ${interaction.member.roles.cache.has("1512331689035304960")}\n` +
-    `Team: ${interaction.member.roles.cache.has(team.roleId)}\n` +
-    `Team ID: ${team.roleId}`,
-  ephemeral: true,
-});
-  if (!hasStaffRole || !hasTeamRole) {
-    return interaction.reply({
-      content: `❌ You need Head Coach or General Manager AND the **${team.name}** role to manage this team.`,
-      ephemeral: true,
+    const hasTeamRole = interaction.member.roles.cache.has(team.roleId);
+
+    if (!hasStaffRole || !hasTeamRole) {
+      return interaction.reply({
+        content: `❌ You need Head Coach or General Manager AND the **${team.name}** role to manage this team.`,
+        ephemeral: true,
+      });
+    }
+
+    const freshPlayer = await interaction.guild.members.fetch(player.id);
+
+    if (!freshPlayer.roles.cache.has(team.roleId)) {
+      return interaction.reply({
+        content: `❌ ${freshPlayer} is not on **${team.name}**.`,
+        ephemeral: true,
+      });
+    }
+
+    await freshPlayer.roles.remove([PLAYER_ROLE_ID, team.roleId]);
+    await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
+
+    await interaction.guild.members.fetch();
+
+    const teamRole = interaction.guild.roles.cache.get(team.roleId);
+    const rosterCount = teamRole ? teamRole.members.size : "Unknown";
+
+    await interaction.reply({
+      content: `📄 ${freshPlayer} has been released by **${team.name}**.\nRoster Count: **${rosterCount}/15**`,
     });
-  }
-
-  const freshPlayer = await interaction.guild.members.fetch(player.id);
-
-  if (!freshPlayer.roles.cache.has(team.roleId)) {
-    return interaction.reply({
-      content: `❌ ${freshPlayer} is not on **${team.name}**.`,
-      ephemeral: true,
-    });
-  }
-
-  await freshPlayer.roles.remove(["1512331841179353118", team.roleId]);
-  await freshPlayer.roles.add("1512331925241598062");
-
-  await interaction.guild.members.fetch();
-
-  const teamRole = interaction.guild.roles.cache.get(team.roleId);
-  const rosterCount = teamRole ? teamRole.members.size : "Unknown";
-
-  await interaction.reply({
-    content: `📄 ${freshPlayer} has been released by **${team.name}**.\nRoster Count: **${rosterCount}/15**`,
-  });
-},
+  },
+};
