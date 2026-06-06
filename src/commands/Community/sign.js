@@ -1,42 +1,42 @@
 
 import { SlashCommandBuilder } from "discord.js";
 
-const HEAD_COACH_ROLE_ID = "PUT_HEAD_COACH_ROLE_ID_HERE";
-const GENERAL_MANAGER_ROLE_ID = "PUT_GENERAL_MANAGER_ROLE_ID_HERE";
-const PLAYER_ROLE_ID = "PUT_PLAYER_ROLE_ID_HERE";
-const FREE_AGENT_ROLE_ID = "PUT_FREE_AGENT_ROLE_ID_HERE";
+const HEAD_COACH_ROLE_ID = "1512331578775310366";
+const GENERAL_MANAGER_ROLE_ID = "1512331689035304960";
+const PLAYER_ROLE_ID = "1512331841179353118";
+const FREE_AGENT_ROLE_ID = "1512331925241598062";
 
 const NBA_TEAMS = [
-  { name: "Atlanta Hawks", roleId: "PUT_HAWKS_ROLE_ID_HERE" },
-  { name: "Boston Celtics", roleId: "PUT_CELTICS_ROLE_ID_HERE" },
-  { name: "Brooklyn Nets", roleId: "PUT_NETS_ROLE_ID_HERE" },
-  { name: "Charlotte Hornets", roleId: "PUT_HORNETS_ROLE_ID_HERE" },
-  { name: "Chicago Bulls", roleId: "PUT_BULLS_ROLE_ID_HERE" },
-  { name: "Cleveland Cavaliers", roleId: "PUT_CAVS_ROLE_ID_HERE" },
-  { name: "Dallas Mavericks", roleId: "PUT_MAVS_ROLE_ID_HERE" },
-  { name: "Denver Nuggets", roleId: "PUT_NUGGETS_ROLE_ID_HERE" },
-  { name: "Detroit Pistons", roleId: "PUT_PISTONS_ROLE_ID_HERE" },
-  { name: "Golden State Warriors", roleId: "PUT_WARRIORS_ROLE_ID_HERE" },
-  { name: "Houston Rockets", roleId: "PUT_ROCKETS_ROLE_ID_HERE" },
-  { name: "Indiana Pacers", roleId: "PUT_PACERS_ROLE_ID_HERE" },
-  { name: "LA Clippers", roleId: "PUT_CLIPPERS_ROLE_ID_HERE" },
-  { name: "Los Angeles Lakers", roleId: "PUT_LAKERS_ROLE_ID_HERE" },
-  { name: "Memphis Grizzlies", roleId: "PUT_GRIZZLIES_ROLE_ID_HERE" },
-  { name: "Miami Heat", roleId: "PUT_HEAT_ROLE_ID_HERE" },
-  { name: "Milwaukee Bucks", roleId: "PUT_BUCKS_ROLE_ID_HERE" },
-  { name: "Minnesota Timberwolves", roleId: "PUT_WOLVES_ROLE_ID_HERE" },
-  { name: "New Orleans Pelicans", roleId: "PUT_PELICANS_ROLE_ID_HERE" },
-  { name: "New York Knicks", roleId: "PUT_KNICKS_ROLE_ID_HERE" },
-  { name: "Oklahoma City Thunder", roleId: "PUT_THUNDER_ROLE_ID_HERE" },
-  { name: "Orlando Magic", roleId: "PUT_MAGIC_ROLE_ID_HERE" },
-  { name: "Philadelphia 76ers", roleId: "PUT_SIXERS_ROLE_ID_HERE" },
-  { name: "Phoenix Suns", roleId: "PUT_SUNS_ROLE_ID_HERE" },
-  { name: "Portland Trail Blazers", roleId: "PUT_BLAZERS_ROLE_ID_HERE" },
-  { name: "Sacramento Kings", roleId: "PUT_KINGS_ROLE_ID_HERE" },
-  { name: "San Antonio Spurs", roleId: "PUT_SPURS_ROLE_ID_HERE" },
-  { name: "Toronto Raptors", roleId: "PUT_RAPTORS_ROLE_ID_HERE" },
-  { name: "Utah Jazz", roleId: "PUT_JAZZ_ROLE_ID_HERE" },
-  { name: "Washington Wizards", roleId: "PUT_WIZARDS_ROLE_ID_HERE" },
+  { name: "Atlanta Hawks", roleId: "1512517955303379007" },
+  { name: "Boston Celtics", roleId: "1512518103861301258" },
+  { name: "Brooklyn Nets", roleId: "1512518153601552636" },
+  { name: "Charlotte Hornets", roleId: "1512518241413627914" },
+  { name: "Chicago Bulls", roleId: "1512518314327277749" },
+  { name: "Cleveland Cavaliers", roleId: "1512518366529716225" },
+  { name: "Dallas Mavericks", roleId: "1512518548579422258" },
+  { name: "Denver Nuggets", roleId: "1512518893502205992" },
+  { name: "Detroit Pistons", roleId: "1512932453491151020" },
+  { name: "Golden State Warriors", roleId: "1512932556172034180" },
+  { name: "Houston Rockets", roleId: "1512932606767792298" },
+  { name: "Indiana Pacers", roleId: "1512932703823990845" },
+  { name: "LA Clippers", roleId: "1512932788699922523" },
+  { name: "Los Angeles Lakers", roleId: "1512932857763594301" },
+  { name: "Memphis Grizzlies", roleId: "1512932929540718724" },
+  { name: "Miami Heat", roleId: "1512932993751318590" },
+  { name: "Milwaukee Bucks", roleId: "1512933063183564860" },
+  { name: "Minnesota Timberwolves", roleId: "1512933150328750170" },
+  { name: "New Orleans Pelicans", roleId: "1512933198181568653" },
+  { name: "New York Knicks", roleId: "1512933266993184898" },
+  { name: "Oklahoma City Thunder", roleId: "1512933332818726933" },
+  { name: "Orlando Magic", roleId: "1512933391677395075" },
+  { name: "Philadelphia 76ers", roleId: "1512933510837567589" },
+  { name: "Phoenix Suns", roleId: "1512933553334390844" },
+  { name: "Portland Trail Blazers", roleId: "1512933621865124062" },
+  { name: "Sacramento Kings", roleId: "1512933667901669437" },
+  { name: "San Antonio Spurs", roleId: "1512933740635230269" },
+  { name: "Toronto Raptors", roleId: "1512933819299266683" },
+  { name: "Utah Jazz", roleId: "1512933864627241111" },
+  { name: "Washington Wizards", roleId: "1512933932742611134" },
 ];
 
 export default {
