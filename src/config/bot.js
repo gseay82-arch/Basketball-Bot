@@ -41,7 +41,7 @@ export const botConfig = {
     owners: process.env.OWNER_IDS?.split(",") || [],
     // options...
   }
-}
+
 
     // Default wait time between command uses (in seconds).
     defaultCooldown: 3, 
