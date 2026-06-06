@@ -61,8 +61,8 @@ export default {
     }
 
     const hasStaffRole =
-      interaction.member.roles.cache.has(1512331578775310366) ||
-      interaction.member.roles.cache.has(1512331689035304960);
+      interaction.member.roles.cache.has("1512331578775310366") ||
+      interaction.member.roles.cache.has("1512331689035304960");
 
     const hasTeamRole = interaction.member.roles.cache.has(team.roleId);
 
@@ -82,8 +82,8 @@ export default {
       });
     }
 
-    await player.roles.add([1512331841179353118, team.roleId]);
-    await player.roles.remove(1512331925241598062).catch(() => null);
+    await player.roles.add(["1512331841179353118", team.roleId]);
+    await player.roles.remove("1512331925241598062").catch(() => null);
 
     await interaction.guild.members.fetch();
 
