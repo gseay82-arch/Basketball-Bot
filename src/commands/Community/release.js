@@ -88,8 +88,10 @@ export default {
       PLAYER_ROLE_ID,
       ...allTeamRoleIds,
 ]);
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-await freshPlayer.roles.add("1512331925241598062");
+    await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
 
     await interaction.guild.members.fetch();
 
