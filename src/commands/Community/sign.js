@@ -75,35 +75,42 @@ export default {
 
     const freshPlayer = await interaction.guild.members.fetch(player.id);
 
-    const alreadyOnTeam = NBA_TEAMS.find(t =>
-      freshPlayer.roles.cache.has(t.roleId)  
+const alreadyOnTeam = NBA_TEAMS.find(t =>
+  freshPlayer.roles.cache.has(t.roleId)
 );
 
-    if (alreadyOnTeam) {
-      return interaction.reply({
-        content: `❌ ${player} is already on **${alreadyOnTeam.name}**. Release them first.`,
-        ephemeral: true,
-      });
-    }
+if (alreadyOnTeam) {
+  return interaction.reply({
+    content: `❌ ${freshPlayer} is already on **${alreadyOnTeam.name}**. Release them first.`,
+    ephemeral: true,
+  });
+}
 
-    await freshPlayer.roles.add([PLAYER_ROLE_ID, team.roleId]);
-    await freshPlayer.roles.remove(FREE_AGENT_ROLE_ID).catch(() => null);
+try {
+  await freshPlayer.roles.add(["1512331841179353118", team.roleId]);
+  await freshPlayer.roles.remove("1512331925241598062").catch(() => null);
+} catch (error) {
+  console.error(error);
 
-    await interaction.guild.members.fetch();
+  return interaction.reply({
+    content: "❌ I could not update this player's roles. Check my role permissions.",
+    ephemeral: true,
+  });
+}
 
-    const teamRole = interaction.guild.roles.cache.get(team.roleId);
-    const rosterCount = teamRole ? teamRole.members.size : "Unknown";
+await interaction.guild.members.fetch();
 
-    const transactionsChannel = interaction.guild.channels.cache.get("1512328699066978455");
+const teamRole = interaction.guild.roles.cache.get(team.roleId);
+const rosterCount = teamRole ? teamRole.members.size : "Unknown";
 
-    if (transactionsChannel) {
-      await transactionsChannel.send(
-        `📝 **SIGNING:** ${player} has signed with **${team.name}**.\nProcessed by: ${interaction.user}`
-      );
-    }
+const transactionsChannel = interaction.guild.channels.cache.get("1512328699066978455");
 
-    await interaction.reply({
-      content: `✅ ${player} has signed with **${team.name}**!\nRoster Count: **${rosterCount}/15**`,
-    });
-  },
-};
+if (transactionsChannel) {
+  await transactionsChannel.send(
+    `📝 **SIGNING:** ${freshPlayer} has signed with **${team.name}**.\nProcessed by: ${interaction.user}`
+  );
+}
+
+return interaction.reply({
+  content: `✅ ${freshPlayer} has signed with **${team.name}**!\nRoster Count: **${rosterCount}/15**`,
+});
