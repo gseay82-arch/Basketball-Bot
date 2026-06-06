@@ -90,10 +90,16 @@ export default {
     const teamRole = interaction.guild.roles.cache.get(team.roleId);
     const rosterCount = teamRole ? teamRole.members.size : "Unknown";
 
+    const transactionsChannel = interaction.guild.channels.cache.get("1512328699066978455");
+
+    if (transactionsChannel) {
+      await transactionsChannel.send(
+        `📝 **SIGNING:** ${player} has signed with **${team.name}**.\nProcessed by: ${interaction.user}`
+      );
+    }
+
     await interaction.reply({
       content: `✅ ${player} has signed with **${team.name}**!\nRoster Count: **${rosterCount}/15**`,
     });
   },
 };
-
-
