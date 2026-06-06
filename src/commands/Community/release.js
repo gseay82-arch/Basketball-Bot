@@ -89,7 +89,7 @@ export default {
       ...allTeamRoleIds,
 ]);
 
-await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
+await freshPlayer.roles.add("1512331925241598062");
 
     await interaction.guild.members.fetch();
 
