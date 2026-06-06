@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 
+const TRANSACTIONS_CHANNEL_ID = "PUT_TRANSACTIONS_CHANNEL_ID_HERE";
 const HEAD_COACH_ROLE_ID = "1512331578775310366";
 const GENERAL_MANAGER_ROLE_ID = "1512331689035304960";
 const PLAYER_ROLE_ID = "1512331841179353118";
@@ -88,6 +89,14 @@ export default {
 
     const teamRole = interaction.guild.roles.cache.get(team.roleId);
     const rosterCount = teamRole ? teamRole.members.size : "Unknown";
+
+    const transactionsChannel = interaction.guild.channels.cache.get("1512328699066978455");
+
+    if (transactionsChannel) {
+      await transactionsChannel.send(
+        `📄 **RELEASE:** ${freshPlayer} has been released by **${team.name}**.\nProcessed by: ${interaction.user}`
+      );
+    }
 
     await interaction.reply({
       content: `📄 ${freshPlayer} has been released by **${team.name}**.\nRoster Count: **${rosterCount}/15**`,
