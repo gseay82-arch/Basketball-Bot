@@ -60,8 +60,8 @@ export default {
     }
 
     const hasStaffRole =
-      interaction.member.roles.cache.has(HEAD_COACH_ROLE_ID) ||
-      interaction.member.roles.cache.has(GENERAL_MANAGER_ROLE_ID);
+      interaction.member.roles.cache.has("1512331578775310366") ||
+      interaction.member.roles.cache.has("1512331689035304960");
 
     const hasTeamRole = interaction.member.roles.cache.has(team.roleId);
 
@@ -81,8 +81,8 @@ export default {
       });
     }
 
-    await freshPlayer.roles.remove([PLAYER_ROLE_ID, team.roleId]);
-    await freshPlayer.roles.add(FREE_AGENT_ROLE_ID);
+    await freshPlayer.roles.remove(["1512331841179353118", team.roleId]);
+    await freshPlayer.roles.add("1512331925241598062");
 
     await interaction.guild.members.fetch();
 
