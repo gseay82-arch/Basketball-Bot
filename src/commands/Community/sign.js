@@ -114,3 +114,5 @@ if (transactionsChannel) {
 return interaction.reply({
   content: `✅ ${freshPlayer} has signed with **${team.name}**!\nRoster Count: **${rosterCount}/15**`,
 });
+  },
+};
