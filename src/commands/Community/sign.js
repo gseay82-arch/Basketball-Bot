@@ -46,13 +46,12 @@ export default {
     .addUserOption(option =>
       option.setName("player").setDescription("Player to sign").setRequired(true)
     )
-    .addStringOption(option =>
-      option
-        .setName("team")
-        .setDescription("Team to sign the player to")
-        .setRequired(true)
-        .addChoices(...NBA_TEAMS.map(team => ({ name: team.name, value: team.name })))
-    ),
+   .addStringOption(option =>
+  option
+    .setName("team")
+    .setDescription("Example: New York Knicks")
+    .setRequired(true)
+),
 
   async execute(interaction) {
     const player = interaction.options.getMember("player");
