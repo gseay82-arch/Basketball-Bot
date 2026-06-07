@@ -47,12 +47,11 @@ export default {
       option.setName("player").setDescription("Player to release").setRequired(true)
     )
     .addStringOption(option =>
-      option
-        .setName("team")
-        .setDescription("Team to release the player from")
-        .setRequired(true)
-        .addChoices(...NBA_TEAMS.map(team => ({ name: team.name, value: team.name })))
-    ),
+  option
+    .setName("team")
+    .setDescription("Example: New York Knicks")
+    .setRequired(true)
+),
 
   async execute(interaction) {
     const player = interaction.options.getMember("player");
