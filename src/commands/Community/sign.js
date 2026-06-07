@@ -56,7 +56,11 @@ export default {
   async execute(interaction) {
     const player = interaction.options.getMember("player");
     const teamName = interaction.options.getString("team");
-    const team = NBA_TEAMS.find(t => t.name === teamName);
+    const team = NBA_TEAMS.find(t => t.name.toLowerCase() === teamName.toLowerCase());
+
+    if (!team) {
+    return interaction.reply({ content: "❌ Team not found.", ephemeral: true });
+}
 
     const hasStaffRole =
       interaction.member.roles.cache.has(HEAD_COACH_ROLE_ID) ||
