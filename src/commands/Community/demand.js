@@ -56,23 +56,23 @@ export default {
       });
     }
 
-    if (!member.roles.cache.has(PLAYER_ROLE_ID)) {
-      return interaction.reply({
-        content: "❌ You must have the Player role to use /demand.",
-        ephemeral: true,
-      });
-    }
-
     const currentTeam = NBA_TEAMS.find(team =>
-      member.roles.cache.has(team.roleId)
-    );
+  member.roles.cache.has(team.roleId)
+);
 
-    if (!currentTeam) {
-      return interaction.reply({
-        content: "❌ You are not currently signed to a team.",
-        ephemeral: true,
-      });
-    }
+if (!member.roles.cache.has(PLAYER_ROLE_ID) || !currentTeam) {
+  return interaction.reply({
+    content: "❌ Only signed players may use /demand.",
+    ephemeral: true,
+  });
+}
+
+if (member.roles.cache.has(FREE_AGENT_ROLE_ID)) {
+  return interaction.reply({
+    content: "❌ Free Agents cannot use /demand.",
+    ephemeral: true,
+  });
+}
 
     const allTeamRoleIds = NBA_TEAMS.map(team => team.roleId);
 
