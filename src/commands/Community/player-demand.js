@@ -40,7 +40,7 @@ const NBA_TEAMS = [
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("demand")
+    .setName("playerdemand")
     .setDescription("Demand release from your current team"),
 
   async execute(interaction) {
