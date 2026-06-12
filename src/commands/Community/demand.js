@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { getFromDb, setInDb } from "../../utils/database.js";
+import { getFromDb, setInDb } from "../../../utils/database.js";
 
 const PLAYER_ROLE_ID = "1512331841179353118";
 const FREE_AGENT_ROLE_ID = "1512331925241598062";
