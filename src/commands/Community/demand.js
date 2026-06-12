@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { getFromDb, setInDb } from "../../../utils/database.js";
+import { getFromDb, setInDb } from "../../utils/database.js";
 
 const PLAYER_ROLE_ID = "1512331841179353118";
 const FREE_AGENT_ROLE_ID = "1512331925241598062";
@@ -41,10 +41,28 @@ const NBA_TEAMS = [
 export default {
   data: new SlashCommandBuilder()
     .setName("demand")
-    .setDescription("Demand release from your team"),
+    .setDescription("Demand release from your current team"),
 
   async execute(interaction) {
     const member = await interaction.guild.members.fetch(interaction.user.id);
+
+    const currentTeam = NBA_TEAMS.find(team =>
+      member.roles.cache.has(team.roleId)
+    );
+
+    if (!member.roles.cache.has(PLAYER_ROLE_ID) || !currentTeam) {
+      return interaction.reply({
+        content: "❌ Only signed players may use /demand.",
+        ephemeral: true,
+      });
+    }
+
+    if (member.roles.cache.has(FREE_AGENT_ROLE_ID)) {
+      return interaction.reply({
+        content: "❌ Free Agents cannot use /demand.",
+        ephemeral: true,
+      });
+    }
 
     const demandKey = `guild:${interaction.guild.id}:demand:${member.id}`;
     const hasDemanded = await getFromDb(demandKey, false);
@@ -55,24 +73,6 @@ export default {
         ephemeral: true,
       });
     }
-
-    const currentTeam = NBA_TEAMS.find(team =>
-  member.roles.cache.has(team.roleId)
-);
-
-if (!member.roles.cache.has(PLAYER_ROLE_ID) || !currentTeam) {
-  return interaction.reply({
-    content: "❌ Only signed players may use /demand.",
-    ephemeral: true,
-  });
-}
-
-if (member.roles.cache.has(FREE_AGENT_ROLE_ID)) {
-  return interaction.reply({
-    content: "❌ Free Agents cannot use /demand.",
-    ephemeral: true,
-  });
-}
 
     const allTeamRoleIds = NBA_TEAMS.map(team => team.roleId);
 
