@@ -58,36 +58,36 @@ export default {
       });
     }
 
-    const role = interaction.guild.roles.cache.get(team.roleId);
-
-    if (!role) {
-      return interaction.reply({
-        content: "❌ Team role not found.",
-        ephemeral: true,
-      });
-    }
-
     await interaction.deferReply();
 
     await interaction.guild.members.fetch();
 
-    const members = interaction.guild.members.cache
-      .filter(member => member.roles.cache.has(team.roleId))
-      .sort((a, b) =>
-        a.displayName.localeCompare(b.displayName)
-      );
+    const rosterArray = [];
 
-    const rosterList =
-  [...members.values()]
-    .map((member, index) => `${index + 1}. ${member}`)
-    .join("\n") || "No players on this roster.";
+    for (const member of interaction.guild.members.cache.values()) {
+      if (member.roles.cache.has(team.roleId)) {
+        rosterArray.push(member);
+      }
+    }
+
+    rosterArray.sort((a, b) =>
+      a.displayName.localeCompare(b.displayName)
+    );
+
+    let rosterList = "No players on this roster.";
+
+    if (rosterArray.length > 0) {
+      rosterList = rosterArray
+        .map((member, index) => `${index + 1}. ${member}`)
+        .join("\n");
+    }
 
     const embed = new EmbedBuilder()
       .setTitle(`🏀 ${team.name} Roster`)
       .setDescription(rosterList)
       .setColor("#0099ff")
       .setFooter({
-        text: `Roster Count: ${members.size}/15`,
+        text: `Roster Count: ${rosterArray.length}/15`,
       });
 
     return interaction.editReply({
