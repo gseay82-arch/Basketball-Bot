@@ -78,7 +78,7 @@ export default {
 
     if (rosterArray.length > 0) {
       rosterList = rosterArray
-        .map((member, index) => `${index + 1}. ${member}`)
+        .map((member, index) => `#${index + 1} — ${member}`)
         .join("\n");
     }
 
