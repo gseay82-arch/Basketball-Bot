@@ -53,7 +53,7 @@ export default {
 
     if (!team) {
       return interaction.reply({
-        content: "❌ Team not found.",
+        content: "❌ Team not found. Example: New York Knicks",
         ephemeral: true,
       });
     }
@@ -67,13 +67,19 @@ export default {
       });
     }
 
-    const members = role.members.map(member => member);
+    await interaction.deferReply();
+
+    await interaction.guild.members.fetch();
+
+    const members = interaction.guild.members.cache
+      .filter(member => member.roles.cache.has(team.roleId))
+      .sort((a, b) =>
+        a.displayName.localeCompare(b.displayName)
+      );
 
     const rosterList =
-      members.length > 0
-        ? members.map((member, index) =>
-            `${index + 1}. ${member}`
-          ).join("\n")
+      members.size > 0
+        ? members.map((member, index) => `${index + 1}. ${member}`).join("\n")
         : "No players on this roster.";
 
     const embed = new EmbedBuilder()
@@ -81,10 +87,10 @@ export default {
       .setDescription(rosterList)
       .setColor("#0099ff")
       .setFooter({
-        text: `Roster Count: ${members.length}/15`,
+        text: `Roster Count: ${members.size}/15`,
       });
 
-    await interaction.reply({
+    return interaction.editReply({
       embeds: [embed],
     });
   },
