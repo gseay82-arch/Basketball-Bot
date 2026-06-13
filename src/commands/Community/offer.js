@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 
 const HEAD_COACH_ROLE_ID = "1512331578775310366";
+const GENERAL_MANAGER_ROLE_ID = "1512331689035304960";
 const PLAYER_ROLE_ID = "1512331841179353118";
 const FREE_AGENT_ROLE_ID = "1512331925241598062";
 const TRANSACTIONS_CHANNEL_ID = "1512328699066978455";
@@ -57,18 +58,22 @@ export default {
   async execute(interaction) {
     const player = interaction.options.getMember("player");
 
-    if (!interaction.member.roles.cache.has(HEAD_COACH_ROLE_ID)) {
+    const hasStaffRole =
+      interaction.member.roles.cache.has(HEAD_COACH_ROLE_ID) ||
+      interaction.member.roles.cache.has(GENERAL_MANAGER_ROLE_ID);
+
+    if (!hasStaffRole) {
       return interaction.reply({
-        content: "❌ You must have the Head Coach role to offer players.",
+        content: "❌ You must have the Head Coach or General Manager role to offer players.",
         ephemeral: true,
       });
     }
 
-    const coachTeam = NBA_TEAMS.find(team =>
+    const staffTeam = NBA_TEAMS.find(team =>
       interaction.member.roles.cache.has(team.roleId)
     );
 
-    if (!coachTeam) {
+    if (!staffTeam) {
       return interaction.reply({
         content: "❌ You must have your team role to offer players.",
         ephemeral: true,
@@ -89,12 +94,12 @@ export default {
     }
 
     const acceptButton = new ButtonBuilder()
-      .setCustomId(`offer_accept_${interaction.guild.id}_${coachTeam.roleId}`)
+      .setCustomId(`offer_accept_${interaction.guild.id}_${staffTeam.roleId}`)
       .setLabel("Accept")
       .setStyle(ButtonStyle.Success);
 
     const declineButton = new ButtonBuilder()
-      .setCustomId(`offer_decline_${interaction.guild.id}_${coachTeam.roleId}`)
+      .setCustomId(`offer_decline_${interaction.guild.id}_${staffTeam.roleId}`)
       .setLabel("Decline")
       .setStyle(ButtonStyle.Danger);
 
@@ -102,7 +107,7 @@ export default {
 
     try {
       const dm = await freshPlayer.send({
-        content: `🏀 **${coachTeam.name}** has offered you. Accept?`,
+        content: `🏀 **${staffTeam.name}** has offered you. Accept?`,
         components: [row],
       });
 
@@ -121,7 +126,7 @@ export default {
 
         if (buttonInteraction.customId.startsWith("offer_decline")) {
           await buttonInteraction.update({
-            content: `❌ You declined the offer from **${coachTeam.name}**.`,
+            content: `❌ You declined the offer from **${staffTeam.name}**.`,
             components: [],
           });
 
@@ -132,7 +137,7 @@ export default {
         const guildMember = await guild.members.fetch(freshPlayer.id);
 
         try {
-          await guildMember.roles.add([PLAYER_ROLE_ID, coachTeam.roleId]);
+          await guildMember.roles.add([PLAYER_ROLE_ID, staffTeam.roleId]);
           await guildMember.roles.remove(FREE_AGENT_ROLE_ID).catch(() => null);
         } catch (error) {
           console.error(error);
@@ -147,18 +152,18 @@ export default {
 
         if (transactionsChannel) {
           await transactionsChannel.send(
-            `✅ **ACCEPTED OFFER:** ${guildMember} has accepted their offer from **${coachTeam.name}**.`
+            `✅ **ACCEPTED OFFER:** ${guildMember} has accepted their offer from **${staffTeam.name}**.`
           );
         }
 
         await buttonInteraction.update({
-          content: `✅ You accepted the offer from **${coachTeam.name}**!`,
+          content: `✅ You accepted the offer from **${staffTeam.name}**!`,
           components: [],
         });
       });
 
       return interaction.reply({
-        content: `📨 Offer sent to ${freshPlayer} from **${coachTeam.name}**.`,
+        content: `📨 Offer sent to ${freshPlayer} from **${staffTeam.name}**.`,
         ephemeral: true,
       });
     } catch (error) {
