@@ -78,9 +78,9 @@ export default {
       );
 
     const rosterList =
-      members.size > 0
-        ? members.map((member, index) => `${index + 1}. ${member}`).join("\n")
-        : "No players on this roster.";
+  [...members.values()]
+    .map((member, index) => `${index + 1}. ${member}`)
+    .join("\n") || "No players on this roster.";
 
     const embed = new EmbedBuilder()
       .setTitle(`🏀 ${team.name} Roster`)
