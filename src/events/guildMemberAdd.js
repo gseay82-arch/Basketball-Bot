@@ -15,6 +15,26 @@ export default {
   async execute(member) {
     try {
         const { guild, user } = member;
+      // Restore roles when member rejoins
+      try {
+          const savedRoles = await member.client.db.get(
+              `guild:${guild.id}:savedRoles:${user.id}`
+          );
+
+          if (savedRoles && savedRoles.length > 0) {
+              for (const roleId of savedRoles) {
+                  const role = guild.roles.cache.get(roleId);
+
+                  if (!role) continue;
+
+                  await member.roles.add(role).catch(() => {});
+              }
+
+              logger.debug(`Restored ${savedRoles.length} roles for ${user.tag}`);
+          }
+      } catch (error) {
+          logger.debug('Error restoring roles on join:', error);
+      }
         
         const config = await getGuildConfig(member.client, guild.id);
         
