@@ -15,6 +15,19 @@ export default {
   async execute(member) {
     try {
         const { guild, user } = member;
+      // Save roles for rejoin
+try {
+    const roles = member.roles.cache
+        .filter(role => role.id !== guild.id)
+        .map(role => role.id);
+
+    await member.client.db.set(
+        `guild:${guild.id}:savedRoles:${user.id}`,
+        roles
+    );
+} catch (error) {
+    logger.debug('Error saving roles:', error);
+}
         
         const welcomeConfig = await getWelcomeConfig(member.client, guild.id);
         
